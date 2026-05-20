@@ -81,7 +81,6 @@
             display: block;
         }
 
-        /* כרטיסיית כתבה */
         .article-card {
             background: var(--card-bg);
             border-radius: 16px;
@@ -89,7 +88,6 @@
             box-shadow: 0 8px 16px rgba(0,0,0,0.08);
             margin-bottom: 25px;
             border: 1px solid #e1e8ed;
-            transition: transform 0.2s;
         }
 
         .article-img {
@@ -132,7 +130,6 @@
             font-weight: bold;
             border-radius: 12px;
             cursor: pointer;
-            transition: all 0.2s;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -141,11 +138,8 @@
         }
 
         .btn-true { background-color: var(--success); }
-        .btn-true:hover { background-color: #24a196; }
         .btn-false { background-color: var(--danger); }
-        .btn-false:hover { background-color: #b81428; }
 
-        /* פופאפ מפלצת מודאל */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -168,12 +162,6 @@
             max-width: 400px;
             width: 100%;
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        @keyframes popIn {
-            from { transform: scale(0.8); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
         }
 
         .monster-emoji {
@@ -199,7 +187,6 @@
             cursor: pointer;
         }
 
-        /* דשבורד */
         .dashboard-card {
             background: #f8fafc;
             border-radius: 16px;
@@ -234,7 +221,6 @@
             transition: width 0.5s ease;
         }
 
-        /* בחירת תחומי עניין */
         .category-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -245,12 +231,11 @@
         .category-item {
             background: #f1f5f9;
             border: 2px solid #e2e8f0;
-            padding: 20px;
+            padding: 15px;
             border-radius: 16px;
             text-align: center;
             cursor: pointer;
             font-weight: bold;
-            transition: all 0.2s;
         }
 
         .category-item.selected {
@@ -272,18 +257,16 @@
     </div>
 
     <div id="feed-section" class="content-section active">
-        <div id="articles-container"></div>
+        <div id="articles-container">טוען כתבות...</div>
     </div>
 
     <div id="dashboard-section" class="content-section">
         <h2>סיכום הקריאה השבועי שלך</h2>
-        <p>כאן תוכל לראות באילו נושאים גילית הכי הרבה עניין השבוע!</p>
         <div id="stats-container"></div>
     </div>
 
     <div id="interests-section" class="content-section">
         <h2>מה מעניין אותך לקרוא?</h2>
-        <p>סמן את הנושאים שאתה הכי אוהב, והפיד יתאים את עצמו אליך.</p>
         <div class="category-grid" id="categories-container"></div>
     </div>
 </div>
@@ -292,46 +275,60 @@
     <div class="modal-card">
         <div class="monster-emoji" id="modal-emoji">👾</div>
         <div class="modal-text" id="modal-text">הודעה</div>
-        <button class="modal-btn" id="modal-action-btn" onclick="closeModal()">הבנתי!</button>
+        <button class="modal-btn" id="modal-action-btn" onclick="closeModal()">המשך</button>
     </div>
 </div>
 
 <script>
-    // מחסן נתונים זמני (בהמשך נחבר אותו אוטומטית לגוגל שיטס או קובץ חיצוני)
-    const articlesData = [
-        { id: 1, title: "מדענים הצליחו לגדל חתולים מעופפים במעבדה חסויה בצפון", category: "בעלי חיים", isReal: false, image: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=500", sourceUrl: "" },
-        { id: 2, title: "נאס\"א מאשרת: גשושית מחקר מצאה שרידי מים מתוקים על כוכב מאדים", category: "חלל", isReal: true, image: "https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?w=500", sourceUrl: "https://www.nasa.gov" },
-        { id: 3, title: "קבוצת כדורגל מקצועית החליטה לצרף רובוט בינה מלאכותית כחלוץ מרכזי", category: "טכנולוגיה", isReal: false, image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=500", sourceUrl: "" },
-        { id: 4, title: "התגלה מין חדש של דינוזאור צמחוני עם זנב בצורת גיטרה", category: "מדע", isReal: true, image: "https://images.unsplash.com/photo-1532187863486-abf9d39d6618?w=500", sourceUrl: "https://www.wikipedia.org" }
+    // הגדרת רשימת הקטגוריות המלאה המבוקשת
+    const allCategories = [
+        "ספורט", "בעלי חיים", "מדע", "סרטים", "טכנולוגיה", 
+        "המצאות בתחום הטבע והסביבה", "בישול", "אסטרונומיה", 
+        "משחקי מחשב", "אקטואליה", "בדיחות"
     ];
 
+    // מחסן משפטי הפידבק המדויקים שלך
     const monstersPhrases = {
         correct: [
-            { text: "כל הכבוד! קלטת את הזיוף מיד! 🎉", emoji: "😎" },
-            { text: "בול פגיעה! שום סיפור שקרי לא יעבור אותך.", emoji: "🦖" }
+            { text: "קשה לעבוד עליך!", emoji: "😎" },
+            { text: "סחתיין! עליך לא משקרים", emoji: "🦖" },
+            { text: "צדקת! זה שקר וכזב!", emoji: "💪" },
+            { text: "שקרים סופם להתגלות. כל הכבוד לך!", emoji: "🥇" }
         ],
         incorrect: [
-            { text: "אופס! נראה לך שזה אמיתי? היצור תפס אותך! 😜", emoji: "👾" },
-            { text: "נו באמת, חתולים לא עפים! נסה שוב פעם.", emoji: "🐱" }
+            { text: "?@!נראה לך שזה אמיתי", emoji: "👾" },
+            { text: "נו באמת, חתולים לא עפים!", emoji: "🐱" },
+            { text: "אי אי אי! נפלת בפח. זו כתבה מזוייפת", emoji: "👹" },
+            { text: "אופסי... נפלת בפח", emoji: "💥" },
+            { text: "לפעמים קשה להבחין בין אמת לשקר. הפעם לא הצלחת", emoji: "🤷‍♂️" },
+            { text: "אזהרה חמורה! זהו שקר שקרי בהחלט!", emoji: "🚨" }
         ]
     };
 
-    // שליפת תחומי עניין ויומן קריאה מהזיכרון המקומי של הדפדפן
-    let userInterests = JSON.parse(localStorage.getItem('userInterests')) || ["בעלי חיים", "חלל", "טכנולוגיה", "מדע"];
+    let articlesData = [];
+    let userInterests = JSON.parse(localStorage.getItem('userInterests')) || [...allCategories];
     let userLog = JSON.parse(localStorage.getItem('userLog')) || [];
 
-    // ניווט בין טאבים
+    // פונקציה הטוענת את הנתונים ישירות מקובץ ה-data.json שבשרת
+    async function loadArticles() {
+        try {
+            const response = await fetch('data.json');
+            const data = await response.json();
+            articlesData = data.articles;
+            renderFeed();
+        } catch (error) {
+            document.getElementById('articles-container').innerText = 'שגיאה בטעינת הכתבות.';
+        }
+    }
+
     function switchTab(tabId) {
         document.querySelectorAll('.content-section').forEach(el => el.classList.remove('active'));
         document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-        
         document.getElementById(`${tabId}-section`).classList.add('active');
         event.target.classList.add('active');
-
         if(tabId === 'dashboard') { renderDashboard(); }
     }
 
-    // הצגת הכתבות בפיד לפי תחומי העניין שנבחרו
     function renderFeed() {
         const container = document.getElementById('articles-container');
         container.innerHTML = '';
@@ -339,7 +336,7 @@
         const filtered = articlesData.filter(art => userInterests.includes(art.category));
         
         if(filtered.length === 0) {
-            container.innerHTML = '<p style="text-align:center; color:var(--text-muted);">אין כתבות להצגה. סמן תחומי עניין בטאב השכן!</p>';
+            container.innerHTML = '<p style="text-align:center; color:var(--text-muted);">אין כתבות להצגה בנושאים שנבחרו.</p>';
             return;
         }
 
@@ -361,19 +358,17 @@
         });
     }
 
-    // טיפול בלחיצה על אמת או שקר
     let currentOpenUrl = "";
+
     function handleAnswer(articleId, clickedTrue) {
         const article = articlesData.find(a => a.id === articleId);
         if(!article) return;
 
         const isCorrect = (clickedTrue === article.isReal);
         
-        // תיעוד הלחיצה לטובת הדשבורד השבועי
         userLog.push({ date: new Date().toISOString(), category: article.category });
         localStorage.setItem('userLog', JSON.stringify(userLog));
 
-        // קביעת המשפט והאייקון שיקפצו
         let feedback;
         if (isCorrect) {
             feedback = monstersPhrases.correct[Math.floor(Math.random() * monstersPhrases.correct.length)];
@@ -383,15 +378,14 @@
             currentOpenUrl = "";
         }
 
-        // הצגת הפידבק במודאל
         document.getElementById('modal-emoji').innerText = feedback.emoji;
         document.getElementById('modal-text').innerText = feedback.text;
         
         const actionBtn = document.getElementById('modal-action-btn');
         if (currentOpenUrl) {
-            actionBtn.innerText = "המשך לקריאת הכתבה באתר ➔";
+            actionBtn.innerText = "המשך לקריאת הכתבה המקורית ➔";
         } else {
-            actionBtn.innerText = "הבנתי, המשך לכתבה הבאה!";
+            actionBtn.innerText = "הבנתי!";
         }
 
         document.getElementById('feedback-modal').style.display = 'flex';
@@ -405,12 +399,10 @@
         }
     }
 
-    // רינדור דשבורד
     function renderDashboard() {
         const container = document.getElementById('stats-container');
         container.innerHTML = '';
 
-        // ספירת קטגוריות מתוך הלוג
         const counts = {};
         userLog.forEach(log => {
             counts[log.category] = (counts[log.category] || 0) + 1;
@@ -418,7 +410,7 @@
 
         const total = userLog.length;
         if(total === 0) {
-            container.innerHTML = '<p>עדיין לא קראת כתבות השבוע. התחל לשחק!</p>';
+            container.innerHTML = '<p>עדיין לא קראת כתבות השבוע.</p>';
             return;
         }
 
@@ -441,13 +433,11 @@
         });
     }
 
-    // רינדור מסך ניהול תחומי עניין
     function renderInterests() {
-        const categories = ["בעלי חיים", "חלל", "טכנולוגיה", "מדע"];
         const container = document.getElementById('categories-container');
         container.innerHTML = '';
 
-        categories.forEach(cat => {
+        allCategories.forEach(cat => {
             const item = document.createElement('div');
             item.className = `category-item ${userInterests.includes(cat) ? 'selected' : ''}`;
             item.innerText = cat;
@@ -465,8 +455,7 @@
         });
     }
 
-    // הפעלה ראשונית של הדף
-    renderFeed();
+    loadArticles();
     renderInterests();
 </script>
 
