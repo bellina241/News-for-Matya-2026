@@ -1,0 +1,36 @@
+{
+  "articles": [
+    {
+      "id": 1,
+      "title": "נבחרת ישראל בכדורגל העפילה לגמר אליפות אירופה לאחר ניצחון דרמטי",
+      "category": "ספורט",
+      "isReal": true,
+      "image": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=500",
+      "sourceUrl": "https://www.sport5.co.il"
+    },
+    {
+      "id": 2,
+      "title": "מדענים באוניברסיטה העברית פיתחו תפוח אדמה שמסוגל להטעין טלפונים ניידים",
+      "category": "טכנולוגיה",
+      "isReal": false,
+      "image": "https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=500",
+      "sourceUrl": ""
+    },
+    {
+      "id": 3,
+      "title": "סוכנות החלל מאשרת: נמצא כוכב לכת חדש שכולו עשוי משוקולד מוצק",
+      "category": "אסטרונומיה",
+      "isReal": false,
+      "image": "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?w=500",
+      "sourceUrl": ""
+    },
+    {
+      "id": 4,
+      "title": "חוקרים גילו זן חדש של לטאות במסגרת המצאות בתחום הטבע והסביבה שמנקות פלסטיק מהים",
+      "category": "המצאות בתחום הטבע והסביבה",
+      "isReal": true,
+      "image": "https://images.unsplash.com/photo-1504450758481-7338eba7524a?w=500",
+      "sourceUrl": "https://www.greenpeace.org"
+    }
+  ]
+}
